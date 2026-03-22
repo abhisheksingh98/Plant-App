@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-
-import { AppLoading } from "expo";
+import * as SplashScreen from "expo-splash-screen";
 import { Asset } from "expo-asset";
 
 import Navigation from "./navigation";
 import { Block } from "./components";
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 // import all used images
 const images = [
@@ -31,39 +33,45 @@ const images = [
   require("./assets/images/avatar.png")
 ];
 
-export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false
-  };
+export default function App() {
+  const [appIsReady, setAppIsReady] = useState(false);
 
-  handleResourcesAsync = async () => {
-    // we're caching all the images
-    // for better performance on the app
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Pre-load assets, make any API calls you need to do here
+        const cacheImages = images.map(image => {
+          return Asset.fromModule(image).downloadAsync();
+        });
 
-    const cacheImages = images.map(image => {
-      return Asset.fromModule(image).downloadAsync();
-    });
-
-    return Promise.all(cacheImages);
-  };
-
-  render() {
-    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
-      return (
-        <AppLoading
-          startAsync={this.handleResourcesAsync}
-          onError={error => console.warn(error)}
-          onFinish={() => this.setState({ isLoadingComplete: true })}
-        />
-      );
+        await Promise.all(cacheImages);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setAppIsReady(true);
+      }
     }
 
-    return (
-      <Block white>
-        <Navigation />
-      </Block>
-    );
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      // This tells the splash screen to hide immediately! If we need this after some logic, we can call it later.
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
   }
+
+  return (
+    <Block white onLayout={onLayoutRootView}>
+      <Navigation />
+    </Block>
+  );
 }
 
 const styles = StyleSheet.create({});

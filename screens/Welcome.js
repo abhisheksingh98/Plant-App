@@ -183,11 +183,14 @@ class Welcome extends Component {
             style={{ width, height: height / 2, overflow: "visible" }}
           />
         )}
-        onScroll={Animated.event([
-          {
-            nativeEvent: { contentOffset: { x: this.scrollX } }
-          }
-        ])}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { x: this.scrollX } }
+            }
+          ],
+          { useNativeDriver: false }
+        )}
       />
     );
   }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Image } from "react-native";
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import Welcome from "../screens/Welcome";
 import Login from "../screens/Login";
@@ -14,38 +14,46 @@ import Settings from "../screens/Settings";
 
 import { theme } from "../constants";
 
-const screens = createStackNavigator(
-  {
-    Welcome,
-    Login,
-    SignUp,
-    Forgot,
-    Explore,
-    Browse,
-    Product,
-    Settings
-  },
-  {
-    defaultNavigationOptions: {
-      headerStyle: {
-        height: theme.sizes.base * 4,
-        backgroundColor: theme.colors.white, // or 'white
-        borderBottomColor: "transparent",
-        elevation: 0 // for android
-      },
-      headerBackImage: <Image source={require("../assets/icons/back.png")} />,
-      headerBackTitle: null,
-      headerLeftContainerStyle: {
-        alignItems: "center",
-        marginLeft: theme.sizes.base * 2,
-        paddingRight: theme.sizes.base
-      },
-      headerRightContainerStyle: {
-        alignItems: "center",
-        paddingRight: theme.sizes.base
-      }
-    }
-  }
-);
+const Stack = createStackNavigator();
 
-export default createAppContainer(screens);
+function Navigation() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Welcome"
+        screenOptions={{
+          headerStyle: {
+            height: theme.sizes.base * 4,
+            backgroundColor: theme.colors.white,
+            borderBottomColor: "transparent",
+            elevation: 0, // for android
+          },
+          headerBackImage: () => (
+            <Image source={require("../assets/icons/back.png")} />
+          ),
+          headerBackTitle: "",
+          headerLeftContainerStyle: {
+            alignItems: "center",
+            marginLeft: theme.sizes.base * 2,
+            paddingRight: theme.sizes.base,
+          },
+          headerRightContainerStyle: {
+            alignItems: "center",
+            paddingRight: theme.sizes.base,
+          },
+        }}
+      >
+        <Stack.Screen name="Welcome" component={Welcome} options={{ headerLeft: null }} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Forgot" component={Forgot} />
+        <Stack.Screen name="Explore" component={Explore} />
+        <Stack.Screen name="Browse" component={Browse} />
+        <Stack.Screen name="Product" component={Product} />
+        <Stack.Screen name="Settings" component={Settings} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default Navigation;

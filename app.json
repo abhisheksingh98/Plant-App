@@ -3,7 +3,7 @@
     "name": "plant-app",
     "slug": "plant-app",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
+    "sdkVersion": "54.0.0",
     "platforms": [
       "ios",
       "android"
@@ -24,6 +24,10 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "plugins": [
+      "expo-asset",
+      "expo-font"
+    ]
   }
 }

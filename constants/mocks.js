@@ -76,9 +76,9 @@ const explore = [
 ];
 
 const profile = {
-  username: "react-ui-kit",
+  username: "test-user",
   location: "Europe",
-  email: "contact@react-ui-kit.com",
+  email: "test@gmail.com",
   avatar: require("../assets/images/avatar.png"),
   budget: 1000,
   monthly_cap: 5000,

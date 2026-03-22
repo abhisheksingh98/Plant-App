@@ -24,7 +24,8 @@ class Explore extends Component {
   handleSearchFocus(status) {
     Animated.timing(this.state.searchFocus, {
       toValue: status ? 0.8 : 0.6, // status === true, increase flex size
-      duration: 150 // ms
+      duration: 150, // ms
+      useNativeDriver: false
     }).start();
   }
 
